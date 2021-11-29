@@ -20,12 +20,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=http"
-      - "traefik.http.routers.traefik.rule=Host(`monitor.yourdomain.com`)"    <<<<< your domain
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=admin:$apr1$ruca84Hq$mbjdMZBAG.KWn7vfN/SNK/"  <<<<< your key
+      - "traefik.http.routers.traefik.rule=Host(`
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
-      - "traefik.http.routers.traefik-secure.rule=Host(`monitor.yourdomain.com`)"    <<<<< your domain
+      - "traefik.http.routers.traefik-secure.rule=Host(`
       - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=http"
