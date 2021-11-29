@@ -21,7 +21,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.rule=Host(`monitor.yourdomain.com`)"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=keypassword
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=keypassword"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
