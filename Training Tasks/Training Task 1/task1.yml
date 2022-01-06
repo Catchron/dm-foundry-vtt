@@ -1,0 +1,68 @@
+---
+- hosts: anshosts
+  become: yes
+  tasks:
+# Task 1 - Step 1
+  - name: update ubuntu and confirm iptables is present
+    apt:
+      update_cache: yes
+      name:
+      - iptables
+      - iptables-persistent
+      state: latest
+
+  - name: set default policy to accept
+    ansible.builtin.iptables:
+      chain: INPUT
+      policy: ACCEPT
+
+  - name: flush IP tables
+    ansible.builtin.iptables:
+      flush: yes
+
+  - name: add loopback
+    ansible.builtin.iptables:
+      chain: INPUT
+      in_interface: lo
+      jump: ACCEPT
+
+  - name: add established connections
+    ansible.builtin.iptables:
+      chain: INPUT
+      ctstate: ESTABLISHED,RELATED
+      jump: ACCEPT
+
+  - name: add port 22
+    ansible.builtin.iptables:
+      chain: INPUT
+      protocol: tcp
+      destination_port: 22
+      jump: ACCEPT
+
+  - name: drop all other connections
+    ansible.builtin.iptables:
+      chain: INPUT
+      policy: DROP
+
+  - name: save firewall rules
+    ansible.builtin.shell: sudo iptables-save > /etc/iptables/rules.v4
+
+# Task 1 - Step 2
+
+  - name: make sure we have one admin
+    ansible.builtin.user:
+      name: nagrimor
+      group: sudo
+
+  - name: disable root ssh
+    ansible.builtin.replace:
+      path: /etc/ssh/sshd_config
+      regexp: ^(# *)?PermitRootLogin( \w*$)
+      replace: PermitRootLogin no
+
+  - name: restart sshd service
+    ansible.builtin.systemd:
+      name: sshd
+      state: restarted
+
+# Task 1 - Step 3
